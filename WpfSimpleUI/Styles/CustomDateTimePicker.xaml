@@ -1,0 +1,80 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WpfSimpleUI.Styles"
+                    xmlns:cus="clr-namespace:WpfSimpleUI.CustomControls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/WpfSimpleUI;component/Styles/Calendar.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style x:Key="InnerTextBoxStyle" TargetType="TextBox">
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+
+    <Style x:Key="InnerTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+
+    <PathGeometry x:Key="DatePickerButtonPathData" Figures="M2,6 H16 V16 H2 M12,0 V2 H5 V0 H3 V2 H2 c-2,0 -2,2 -2,2 V16 c0,1 0,2 2,2 H16 c2,0 2,-1 2,-2 V4 c0,0 0,-2 -2,-2 H14 V0 M6,7 h6 v2 l-3,6 h-2 l3,-6 h-4"></PathGeometry>
+
+    <Style TargetType="{x:Type cus:CustomDateTimePicker}">
+        <Setter Property="CalendarStyle" Value="{StaticResource CustomCalendarStyle}"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cus:CustomDateTimePicker}" x:Name="Host">
+                    <ControlTemplate.Resources>
+                        <SolidColorBrush x:Key="ButtonMouseOverBrushResource" Color="{TemplateBinding ButtonMouseOverBrush}"></SolidColorBrush>
+                    </ControlTemplate.Resources>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_DisabledVisual"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="PART_Root" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Inner Textbox-->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="2999" Min="0" Text="{Binding Year, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:0000},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                                <TextBlock Style="{StaticResource InnerTextBlockStyle}" Text="-"></TextBlock>
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="12" Min="1" Text="{Binding Month, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:00},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                                <TextBlock Style="{StaticResource InnerTextBlockStyle}" Text="-"></TextBlock>
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="31" Min="1" Text="{Binding Day, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:00},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                                <TextBlock Style="{StaticResource InnerTextBlockStyle}" Text=" "></TextBlock>
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="23" Min="0" Text="{Binding Hour, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:00},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                                <TextBlock Style="{StaticResource InnerTextBlockStyle}" Text=":"></TextBlock>
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="59" Min="0" Text="{Binding Minute, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:00},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                                <TextBlock Style="{StaticResource InnerTextBlockStyle}" Text=":"></TextBlock>
+                                <cus:NumericTextBox Style="{StaticResource InnerTextBoxStyle}" Max="59" Min="0" Text="{Binding Second, RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:00},UpdateSourceTrigger=PropertyChanged}"></cus:NumericTextBox>
+                            </StackPanel>
+
+                            <cus:PathButton x:Name="PART_Button" Grid.Column="1" Grid.Row="0" Padding="2" HorizontalAlignment="Right"
+                                            PathGeometry="{StaticResource DatePickerButtonPathData}"
+                                            PathDefaultBrush="{Binding ButtonDefaultBrush,RelativeSource={RelativeSource TemplatedParent}}" 
+                                            PathMouseOverBrush="{Binding ButtonMouseOverBrush,RelativeSource={RelativeSource TemplatedParent}}">
+                            </cus:PathButton>
+
+                            <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
+                                <Rectangle Grid.Column="0" Fill="#A5FFFFFF"/>
+                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" StaysOpen="False"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
